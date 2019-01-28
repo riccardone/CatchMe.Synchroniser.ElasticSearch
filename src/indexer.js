@@ -36,13 +36,13 @@ function init() {
     _client = new elasticsearch.Client({
         host: _link
     });
-    initIndex("friendSessions", putMappingsForFriendSessionEvents)
+    initIndex("friendsessions", putMappingsForFriendSessionEvents)
         .then((response) => {
             return initIndex("geoTrakings", putMappings);
         }).then((response) => {
             _interval = setInterval(function () {
                 _docsReady = flusher(_docsReady, "geoTrakings", "geoTracking");
-                _friendSessionDocsReady = flusher(_friendSessionDocsReady, "friendSessions", "friendSession");
+                _friendSessionDocsReady = flusher(_friendSessionDocsReady, "friendsessions", "friendsessions");
             }, _flushInterval);
         }).catch((error) => {
             logger.error(error);
@@ -84,7 +84,7 @@ var stopIndexer = function () {
 
 function putMappingsForFriendSessionEvents() {
     return _client.indices.putMapping({
-        "index": "friendSessions",
+        "index": "friendsessions",
         "type": "friendSession",
         "body": {
             "friendSessionEvent": {
